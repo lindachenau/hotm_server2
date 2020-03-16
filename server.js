@@ -1,6 +1,6 @@
 const express = require('express');
 const codesender = require("./codesender");
-const reminder = require("./reminder");
+// const reminder = require("./reminder");
 const stripe = require("stripe")(process.env['REACT_APP_STRIPE_PRIVATE_KEY']);
 
 const app = express();
@@ -43,11 +43,11 @@ app.post('/send', async (req, res) => {
 });
 
 //Reminder email server
-app.post('/reminder', async (req, res) => {
-  const message = await reminder.set(req);
-  console.log(message);
-  res.sendStatus(200);
-});
+// app.post('/reminder', async (req, res) => {
+//   const message = await reminder.set(req);
+//   console.log(message);
+//   res.sendStatus(200);
+// });
 
 /*--------------------Routing Over----------------------------*/
 const port = process.env.PORT || 9000
