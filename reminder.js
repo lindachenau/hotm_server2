@@ -1,8 +1,29 @@
 require('dotenv').config({path: __dirname + '/.env'})
 const nodemailer = require("nodemailer");
+const moment = require("moment");
+
+const redis = require('redis');
+redisClient =  redis.createClient(process.env['REDISCLOUD_URL']);
+redisClient.on('connect', function () {
+  console.info('successful connection to redis server');
+});
+
+redisClient.on('error', function (err) {
+  console.log('Redis error encountered', err);
+});
+
+redisClient.on('end', function() {
+  console.log('Redis connection closed');
+});
+
 const kue = require("kue");
-const moment = require("moment")
-const queue = kue.createQueue();
+const queue = kue.createQueue({
+  redis: {
+    createClientFactory: function(){
+        return redisClient;
+    }
+  }  
+});
 
 /*
   Here we are configuring our SMTP Server details.
