@@ -3,28 +3,13 @@ const nodemailer = require("nodemailer");
 const moment = require("moment");
 
 const redis = require('redis');
-// redisClient =  redis.createClient(process.env['REDISCLOUD_URL']);
-redisClient =  redis.createClient('http://127.0.0.1:6379');
-redisClient.on('connect', function () {
-  console.info('successful connection to redis server');
-});
-
-redisClient.on('error', function (err) {
-  console.log('Redis error encountered', err);
-});
-
-redisClient.on('end', function() {
-  console.log('Redis connection closed');
-});
-
 const kue = require("kue");
-const queue = kue.createQueue({
-  redis: {
-    createClientFactory: function() {
-      return redisClient;
-    }
-  }
-});
+
+kue.redis.createClient = function() {
+  const client = redis.createClient(process.env['REDISCLOUD_URL']);
+  return client;
+};
+const queue = kue.createQueue();
 
 /*
   Here we are configuring our SMTP Server details.
