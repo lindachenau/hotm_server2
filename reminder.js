@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const moment = require("moment");
 
 const redis = require('redis');
-redisClient =  redis.createClient(process.env['REDISCLOUD_URL']);
+redisClient =  redis.createClient(6379, process.env['REDISCLOUD_URL'], {});
 redisClient.on('connect', function () {
   console.info('successful connection to redis server');
 });
