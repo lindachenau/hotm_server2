@@ -3,7 +3,8 @@ const nodemailer = require("nodemailer");
 const moment = require("moment");
 
 const redis = require('redis');
-redisClient =  redis.createClient(6379, process.env['REDISCLOUD_URL'], {});
+// redisClient =  redis.createClient(process.env['REDISCLOUD_URL']);
+redisClient =  redis.createClient('http://127.0.0.1:6379');
 redisClient.on('connect', function () {
   console.info('successful connection to redis server');
 });
@@ -19,10 +20,10 @@ redisClient.on('end', function() {
 const kue = require("kue");
 const queue = kue.createQueue({
   redis: {
-    createClientFactory: function(){
-        return redisClient;
+    createClientFactory: function() {
+      return redisClient;
     }
-  }  
+  }
 });
 
 /*
