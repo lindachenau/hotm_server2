@@ -1,3 +1,4 @@
+require('dotenv').config({path: __dirname + '/.env'})
 const express = require('express');
 const codesender = require("./codesender");
 const reminder = require("./reminder");
@@ -44,9 +45,14 @@ app.post('/send', async (req, res) => {
 
 //Reminder email server
 app.post('/reminder', async (req, res) => {
-  const message = await reminder.set(req);
-  console.log(message);
-  res.sendStatus(200);
+  try {
+    const message = await reminder.set(req);
+    console.log(message);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: err});
+  }
 });
 
 /*--------------------Routing Over----------------------------*/
