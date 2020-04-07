@@ -17,14 +17,14 @@ app.use(function(req, res, next) {
 //Stripe charge server
 app.post("/charge", async (req, res) => {
   try {
-    let {status} = await stripe.charges.create({
+    let {id, status} = await stripe.charges.create({
       amount: req.body.amount,
       currency: "aud",
       description: req.body.description,
       source: req.body.id
     });
 
-    res.json({status});
+    res.json({id, status});
   } catch (err) {
     console.log(err);
     res.status(500).json({error: err});
